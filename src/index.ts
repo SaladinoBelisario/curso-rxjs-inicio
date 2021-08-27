@@ -1,26 +1,25 @@
-import {Observable, Observer} from 'rxjs';
+import {Observable, Observer, Subject} from 'rxjs';
 
 const observer: Observer<any> = {
     next    : value => console.log('next:', value),
-    error   : error => console.log('error:', error),
+    error   : error => console.warn('error:', error),
     complete: () => console.log('complete')
 };
 
-const intervalo$ = new Observable<number>( subscriber =>{
-    let count = 0;
-    const interval = setInterval(() => {
-        count++;
-        subscriber.next(count);
-    }, 3000);
+const intervalos$ = new Observable<number>( subs => {
+    const intervalID = setInterval(
+        () => subs.next(Math.random()), 1000
+    );
 
-    return () =>{
-        clearInterval(interval);
-        console.log('Intervalo destruido');
-    }
+    return () => clearInterval(intervalID);
+
 });
 
-const subscription = intervalo$.subscribe( num => console.log('Num:', num));
+//const subs1 = intervalos$.subscribe(console.log);
 
-setTimeout(() => {
-    subscription.unsubscribe();
-}, 3000);
+/**
+ * Subject tiene casteo múltiple
+ * También es un Observer
+ * Next, Error y Complete
+ */
+const subject$ = new Subject();
