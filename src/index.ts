@@ -8,7 +8,7 @@ const observer: Observer<any> = {
 
 const intervalos$ = new Observable<number>( subs => {
     const intervalID = setInterval(
-        () => subs.next(Math.random()), 1000
+        () => subs.next(Math.random()), 3000
     );
 
     return () => clearInterval(intervalID);
@@ -23,3 +23,4 @@ const intervalos$ = new Observable<number>( subs => {
  * Next, Error y Complete
  */
 const subject$ = new Subject();
+intervalos$.subscribe(subject$);
