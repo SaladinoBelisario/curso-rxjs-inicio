@@ -1,26 +1,18 @@
-import {Observable, Observer, Subject} from 'rxjs';
-
-const observer: Observer<any> = {
-    next    : value => console.log('next:', value),
-    error   : error => console.warn('error:', error),
-    complete: () => console.log('complete')
-};
-
-const intervalos$ = new Observable<number>( subs => {
-    const intervalID = setInterval(
-        () => subs.next(Math.random()), 3000
-    );
-
-    return () => clearInterval(intervalID);
-
-});
-
-//const subs1 = intervalos$.subscribe(console.log);
+import { of, from } from "rxjs";
 
 /**
- * Subject tiene casteo múltiple
- * También es un Observer
- * Next, Error y Complete
+ * of --> toma argumentos y devuelve un stream
+ * from --> array, promise, iterable, observable
  */
-const subject$ = new Subject();
-intervalos$.subscribe(subject$);
+
+const observer = {
+    next: val => console.log('next: ', val),
+    complete: () => console.log('complete')
+}
+
+//const source$ = from([1,2,3,4,5]);
+//const source$ = of(...[1,2,3,4,5]);
+//const source$ = from('Saladino');
+const source$ = from(fetch('https://api.github.com/users/saladinobelisario'));
+
+source$.subscribe(observer);
